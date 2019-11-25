@@ -24,7 +24,6 @@ public class DatabaseConfiguration {
                 .locations("classpath:db/migrations")
                 .outOfOrder(true)
                 .baselineOnMigrate(true)
-                .schemas("delivery")
                 .load();
     }
 

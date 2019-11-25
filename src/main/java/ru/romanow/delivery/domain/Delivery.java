@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "delivery", schema = "delivery")
+@Table(name = "delivery")
 public class Delivery {
 
     @Id
