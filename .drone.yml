@@ -14,3 +14,29 @@ steps:
     commands:
       - echo "127.0.0.1 warehouse" >> /etc/hosts
       - gradle clean compileJava test jacocoTestReport --info
+
+  - name: trigger
+    image: plugins/downstream
+    settings:
+      server: https://cloud.drone.io
+      token:
+        from_secret: DRONE_TOKEN
+      fork: true
+      repositories:
+        - Romanow/scc-orders
+    trigger:
+      branch:
+        - master
+      event:
+        - push
+
+  - name: coverage
+    image: plugins/codecov
+    settings:
+      token:
+        from_secret: COVERAGE_TOKEN
+      files:
+        - '*.xml'
+      paths:
+        - build/reports/jacoco
+      verbose: true
