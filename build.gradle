@@ -62,7 +62,7 @@ publishing {
     publications {
         stubs(MavenPublication) {
             artifact stubsJar
-            artifactId delivery
+            artifactId "delivery"
         }
     }
 }
