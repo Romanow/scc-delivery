@@ -1,0 +1,24 @@
+= [Heisenbug Conf] Сервис доставки REST API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+== Сервис доставки
+
+Запрос на выполнение доставки. Делает запрос к сервису Warehouse для выписывания заказов со склада (перевод в статус READY_FOR_DELIVERY).
+
+Структура запроса:
+include::{snippets}/deliverySuccess/request-fields.adoc[]
+
+Если запрос выполнился корректно, возвращается 202 Created и пустой ответ.
+
+Пример запроса:
+include::{snippets}/deliverySuccess/http-request.adoc[]
+include::{snippets}/deliverySuccess/http-response.adoc[]
+
+В случае, если запрос завершился с ошибков, возвращается статус 4xx или 500 и пояснение в теле овтета:
+include::{snippets}/deliveryNotReady/response-body.adoc[]
