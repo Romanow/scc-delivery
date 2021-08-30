@@ -21,4 +21,4 @@ include::{snippets}/deliverySuccess/http-request.adoc[]
 include::{snippets}/deliverySuccess/http-response.adoc[]
 
 В случае, если запрос завершился с ошибков, возвращается статус 4xx или 500 и пояснение в теле овтета:
-include::{snippets}/deliveryNotReady/response-body.adoc[]
+include::{snippets}/deliveryNotFound/response-body.adoc[]

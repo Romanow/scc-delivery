@@ -2,13 +2,12 @@ plugins {
     id "idea"
     id "jacoco"
     id "maven-publish"
-    id "org.asciidoctor.convert" version "2.4.0"
+    id 'org.asciidoctor.jvm.convert' version "3.3.0"
     id "org.jetbrains.kotlin.jvm" version "1.4.10"
     id "org.jetbrains.kotlin.plugin.jpa" version "1.4.10"
     id "org.jetbrains.kotlin.plugin.spring" version "1.4.10"
     id "org.springframework.boot" version "2.5.0"
     id "io.spring.dependency-management" version "1.0.11.RELEASE"
-    id "org.springframework.cloud.contract" version "3.0.3"
 }
 
 [compileKotlin, compileTestKotlin]*.kotlinOptions*.jvmTarget = "11"
@@ -22,8 +21,8 @@ ext {
     hibernateTypesVersion = "2.10.4"
     postgresContainerVersion = "1.15.2"
 
-    snippetsDir = file('build/generated-snippets')
-    htmlOutputDir = file('build/generated-docs')
+    snippetsDir = file("build/generated-snippets")
+    htmlOutputDir = file("build/generated-docs")
 }
 
 dependencyManagement {
@@ -46,11 +45,11 @@ repositories {
 task stubsJar(type: Jar) {
     archiveClassifier = "stubs"
     into("META-INF/${project.group}/${project.name}/${project.version}/mappings") {
-        include('**/*.*')
+        include("**/*.*")
         from("${project.buildDir}/generated-snippets/stubs")
     }
     into("META-INF/${project.group}/${project.name}/${project.version}/contracts") {
-        include('**/*.groovy')
+        include("**/*.groovy")
         from("${project.buildDir}/generated-snippets/contracts")
     }
 }
@@ -66,7 +65,7 @@ publishing {
     publications {
         stubs(MavenPublication) {
             artifact stubsJar
-            artifactId project.name
+            artifactId "delivery"
         }
     }
 }
@@ -98,33 +97,18 @@ dependencies {
     testImplementation "org.springframework.cloud:spring-cloud-starter-contract-verifier"
     testImplementation "org.testcontainers:postgresql:$postgresContainerVersion"
     testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc"
-    asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor"
 }
 
 asciidoctor {
     dependsOn test
 
-    backends = ['html5']
-    attributes = [
-            'source-highlighter': 'highlightjs',
-            'toc'               : 'left',
-            'toclevels'         : 2,
-            'numbered'          : '',
-            'icons'             : 'font',
-            'setanchors'        : '',
-            'idprefix'          : '',
-            'idseparator'       : '-',
-            'docinfo1'          : '',
-            'safe-mode-unsafe'  : '',
-            'allow-uri-read'    : '',
-            'snippets'          : snippetsDir,
-            linkattrs           : true,
-            encoding            : 'utf-8'
-    ]
-
-    inputs.dir snippetsDir
+    sourceDir "src/docs/asciidoc"
     outputDir htmlOutputDir
-    sourceDir 'src/docs/asciidoc'
+
+    attributes = [
+            "snippets": snippetsDir,
+            "encoding": "utf-8"
+    ]
 }
 
 jacocoTestReport {

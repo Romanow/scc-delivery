@@ -64,7 +64,7 @@ internal class DeliveryControllerTest {
             .andDo(
                 verify()
                     .wiremock(
-                        post(urlMatching(String.format("/api/v1/delivery/$ORDER_UID_SUCCESS/deliver")))
+                        post(urlMatching("/api/v1/delivery/$ORDER_UID_SUCCESS/deliver"))
                             .withRequestBody(matchingJsonPath("$.firstName", RegexPattern("\\S{10}")))
                             .withRequestBody(matchingJsonPath("$.lastName", RegexPattern("\\S{10}")))
                             .withRequestBody(matchingJsonPath("$.address", RegexPattern("\\S{10}")))
@@ -91,8 +91,8 @@ internal class DeliveryControllerTest {
             address = RandomStringUtils.randomAlphabetic(10)
         )
 
-        val url = "$warehouseUrl/items/$ORDER_UID_NOT_FOUND/checkout"
-        val errorResponse = "Order '$ORDER_UID_NOT_FOUND' not found"
+        val url = "$warehouseUrl/api/v1/items/$ORDER_UID_NOT_FOUND/checkout"
+        val errorResponse = "OrderItem '$ORDER_UID_NOT_FOUND' not found"
         val message = "Error request to '$url': 404:$errorResponse"
 
         mockMvc.perform(
