@@ -1,4 +1,4 @@
-= [Heisenbug Conf] Сервис доставки REST API
+= Сервис доставки
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs

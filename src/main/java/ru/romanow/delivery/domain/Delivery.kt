@@ -1,60 +1,55 @@
-package ru.romanow.delivery.domain;
+package ru.romanow.delivery.domain
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-import lombok.Data;
-import lombok.experimental.Accessors;
-import ru.romanow.delivery.domain.enums.DeliveryState;
+import ru.romanow.delivery.domain.enums.DeliveryState
+import java.util.*
+import javax.persistence.*
 
-import javax.persistence.*;
-import java.util.UUID;
-
-@Data
-@Accessors(chain = true)
 @Entity
-@Table(name = "delivery")
-public class Delivery {
-
+@Table(
+    name = "delivery", indexes = [
+        Index(name = "idx_delivery_order_uid", columnList = "order_uid", unique = true)
+    ]
+)
+data class Delivery(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private val id: Int? = null,
 
-    @Column(name = "item_uid", nullable = false, updatable = false)
-    private UUID orderUid;
+    @Column(name = "order_uid", nullable = false, updatable = false)
+    private val orderUid: UUID? = null,
 
-    @Column(name = "first_name", length = 80)
-    private String firstName;
+    @Column(name = "first_name", length = 80, nullable = false)
+    private val firstName: String? = null,
 
     @Column(name = "last_name", length = 80)
-    private String lastName;
+    private val lastName: String? = null,
 
-    @Column(name = "address")
-    private String address;
+    @Column(name = "address", nullable = false)
+    private val address: String? = null,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "state", nullable = false)
-    private DeliveryState state;
+    private val state: DeliveryState? = null
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Delivery delivery = (Delivery) o;
-        return Objects.equal(orderUid, delivery.orderUid);
+        other as Delivery
+
+        if (orderUid != other.orderUid) return false
+        if (state != other.state) return false
+
+        return true
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(orderUid);
+    override fun hashCode(): Int {
+        var result = orderUid?.hashCode() ?: 0
+        result = 31 * result + (state?.hashCode() ?: 0)
+        return result
     }
 
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("orderUid", orderUid)
-                .add("firstName", firstName)
-                .add("lastName", lastName)
-                .add("address", address)
-                .toString();
+    override fun toString(): String {
+        return "Delivery(id=$id, orderUid=$orderUid, firstName=$firstName, lastName=$lastName, address=$address, state=$state)"
     }
 }

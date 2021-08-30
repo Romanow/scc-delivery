@@ -1,5 +1,5 @@
-package ru.romanow.delivery.domain.enums;
+package ru.romanow.delivery.domain.enums
 
-public enum DeliveryState {
-    DELIVERED
+enum class DeliveryState {
+    CREATED, DELIVERED
 }

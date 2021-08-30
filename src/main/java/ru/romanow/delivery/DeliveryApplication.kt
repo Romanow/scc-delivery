@@ -1,11 +1,11 @@
-package ru.romanow.delivery;
+package ru.romanow.delivery
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
 
 @SpringBootApplication
-public class DeliveryApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(DeliveryApplication.class, args);
-    }
+class DeliveryApplication
+
+fun main(args: Array<String>) {
+    SpringApplication.run(DeliveryApplication::class.java, *args)
 }

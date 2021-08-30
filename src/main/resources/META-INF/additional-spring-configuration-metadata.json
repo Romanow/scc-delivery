@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "warehouse.service.url",
+      "type": "java.lang.String",
+      "description": "Warehouse service url."
+    }
+  ]
+}

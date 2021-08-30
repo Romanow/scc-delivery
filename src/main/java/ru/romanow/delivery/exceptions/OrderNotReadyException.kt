@@ -1,8 +1,3 @@
-package ru.romanow.delivery.exceptions;
+package ru.romanow.delivery.exceptions
 
-public class OrderNotReadyException
-        extends RuntimeException {
-    public OrderNotReadyException(String message) {
-        super(message);
-    }
-}
+class OrderNotReadyException(message: String) : RuntimeException(message)

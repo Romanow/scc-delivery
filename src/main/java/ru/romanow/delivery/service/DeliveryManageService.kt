@@ -1,10 +1,9 @@
-package ru.romanow.delivery.service;
+package ru.romanow.delivery.service
 
-import ru.romanow.delivery.model.DeliveryRequest;
+import ru.romanow.delivery.model.DeliveryRequest
+import java.util.*
+import javax.annotation.Nonnull
 
-import javax.annotation.Nonnull;
-import java.util.UUID;
-
-public interface DeliveryManageService {
-    void deliver(@Nonnull UUID orderUid, @Nonnull DeliveryRequest request);
+interface DeliveryManageService {
+    fun deliver(@Nonnull orderUid: UUID, @Nonnull request: DeliveryRequest)
 }

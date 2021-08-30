@@ -1,5 +1,5 @@
-package ru.romanow.delivery.model.enums;
+package ru.romanow.delivery.model.enums
 
-public enum OrderState {
+enum class OrderState {
     CREATED, READY_FOR_DELIVERY
 }

@@ -1,18 +1,36 @@
 plugins {
-    id "java"
     id "idea"
     id "jacoco"
     id "maven-publish"
-    id "com.jfrog.bintray" version "1.8.4"
-    id "org.asciidoctor.convert" version "1.5.9.2"
-    id "org.springframework.boot" version "2.1.7.RELEASE"
-    id "io.spring.dependency-management" version "1.0.5.RELEASE"
+    id "org.asciidoctor.convert" version "2.4.0"
+    id "org.jetbrains.kotlin.jvm" version "1.4.10"
+    id "org.jetbrains.kotlin.plugin.jpa" version "1.4.10"
+    id "org.jetbrains.kotlin.plugin.spring" version "1.4.10"
+    id "org.springframework.boot" version "2.5.0"
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
+    id "org.springframework.cloud.contract" version "3.0.3"
 }
 
-apply from: "libraries.gradle"
+[compileKotlin, compileTestKotlin]*.kotlinOptions*.jvmTarget = "11"
 
-sourceCompatibility = 1.11
-targetCompatibility = 1.11
+ext {
+    springCloudVersion = "3.0.3"
+    gsonVersion = "2.8.7"
+    guavaVersion = "30.1.1-jre"
+    openApiVersion = "1.5.10"
+    commonsLangVersion = "3.12.0"
+    hibernateTypesVersion = "2.10.4"
+    postgresContainerVersion = "1.15.2"
+
+    snippetsDir = file('build/generated-snippets')
+    htmlOutputDir = file('build/generated-docs')
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-contract-dependencies:$springCloudVersion"
+    }
+}
 
 idea {
     module {
@@ -21,22 +39,8 @@ idea {
     }
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        xml.destination file("${buildDir}/reports/jacoco/report.xml")
-        html.enabled false
-        csv.enabled false
-    }
-}
-
-test {
-    useJUnitPlatform()
-}
-
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 task stubsJar(type: Jar) {
@@ -62,25 +66,39 @@ publishing {
     publications {
         stubs(MavenPublication) {
             artifact stubsJar
-            artifactId "delivery"
+            artifactId project.name
         }
     }
 }
 
-bintray {
-    user = System.getenv("BINTRAY_USER")
-    key = System.getenv("BINTRAY_TOKEN")
-    publications = ['stubs']
-    publish = true
-    pkg {
-        repo = 'scc-microservices'
-        name = "delivery"
-    }
-}
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-logging"
 
-ext {
-    snippetsDir = file('build/generated-snippets')
-    htmlOutputDir = file('build/generated-docs')
+    implementation "org.postgresql:postgresql"
+    implementation "org.flywaydb:flyway-core"
+
+    implementation "org.springdoc:springdoc-openapi-ui:$openApiVersion"
+    implementation "org.springdoc:springdoc-openapi-kotlin:$openApiVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
+
+    implementation "com.google.guava:guava:$guavaVersion"
+    implementation "com.google.code.gson:gson:$gsonVersion"
+    implementation "org.apache.commons:commons-lang3:$commonsLangVersion"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.springframework.cloud:spring-cloud-starter-contract-verifier"
+    testImplementation "org.springframework.cloud:spring-cloud-starter-contract-stub-runner"
+    testImplementation "org.springframework.cloud:spring-cloud-contract-wiremock"
+    testImplementation "org.springframework.cloud:spring-cloud-starter-contract-verifier"
+    testImplementation "org.testcontainers:postgresql:$postgresContainerVersion"
+    testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc"
+    asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor"
 }
 
 asciidoctor {
@@ -109,36 +127,22 @@ asciidoctor {
     sourceDir 'src/docs/asciidoc'
 }
 
-dependencies {
-    // Spring
-    implementation "org.springframework.boot:spring-boot-starter-web"
-    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-    implementation "org.springframework.boot:spring-boot-starter-actuator"
-    implementation "org.springframework.boot:spring-boot-starter-logging"
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        xml.destination file("${buildDir}/reports/jacoco/report.xml")
+        html.enabled false
+        csv.enabled false
+    }
+}
 
-    // DB
-    implementation "org.postgresql:postgresql"
-    implementation "org.flywaydb:flyway-core"
+test {
+    useJUnitPlatform()
+}
 
-    // Common
-    implementation "com.google.guava:guava:${guavaVersion}"
-    implementation "com.google.code.gson:gson:${gsonVersion}"
-    implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
-
-    // Utils
-    compileOnly "com.google.code.findbugs:jsr305:${findBugsVersion}"
-    implementation "org.projectlombok:lombok:${lombokVersion}"
-    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-
-    // Test
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
-    testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc"
-    testImplementation "org.springframework.cloud:spring-cloud-contract-spec:${springContractVersion}"
-    testImplementation "org.springframework.cloud:spring-cloud-contract-wiremock:${springContractVersion}"
-    testImplementation "org.springframework.cloud:spring-cloud-starter-contract-verifier:${springContractVersion}"
-    testImplementation "org.springframework.cloud:spring-cloud-starter-contract-stub-runner:${springContractVersion}"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
-    asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor"
+bootJar {
+    archiveFileName = "${project.name}.jar"
+    layered {
+        enabled = true
+    }
 }
