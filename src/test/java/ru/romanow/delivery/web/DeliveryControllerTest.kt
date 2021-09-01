@@ -69,9 +69,9 @@ internal class DeliveryControllerTest {
                 verify()
                     .wiremock(
                         post(urlEqualTo("/api/v1/delivery/$ORDER_UID_SUCCESS/deliver"))
-                            .withRequestBody(matchingJsonPath("$.firstName", RegexPattern("\\S{10}")))
-                            .withRequestBody(matchingJsonPath("$.lastName", RegexPattern("\\S{10}")))
-                            .withRequestBody(matchingJsonPath("$.address", RegexPattern("\\S{10}")))
+                            .withRequestBody(matchingJsonPath("$.firstName", RegexPattern("\\S+")))
+                            .withRequestBody(matchingJsonPath("$.lastName", RegexPattern("\\S+")))
+                            .withRequestBody(matchingJsonPath("$.address", RegexPattern("\\S+")))
                     )
             )
             .andDo(
@@ -110,9 +110,9 @@ internal class DeliveryControllerTest {
                 verify()
                     .wiremock(
                         post(urlEqualTo("/api/v1/delivery/$ORDER_UID_NOT_FOUND/deliver"))
-                            .withRequestBody(matchingJsonPath("$.address", RegexPattern("\\S{10}")))
-                            .withRequestBody(matchingJsonPath("$.firstName", RegexPattern("\\S{10}")))
-                            .withRequestBody(matchingJsonPath("$.lastName", RegexPattern("\\S{10}")))
+                            .withRequestBody(matchingJsonPath("$.address", RegexPattern("\\S+")))
+                            .withRequestBody(matchingJsonPath("$.firstName", RegexPattern("\\S+")))
+                            .withRequestBody(matchingJsonPath("$.lastName", RegexPattern("\\S+")))
                     )
             )
             .andDo(
