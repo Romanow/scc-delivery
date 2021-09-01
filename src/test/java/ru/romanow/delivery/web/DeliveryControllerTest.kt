@@ -7,6 +7,7 @@ import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.transaction.annotation.Transactional
 import ru.romanow.delivery.config.DatabaseTestConfiguration
 import ru.romanow.delivery.model.DeliveryRequest
 import java.util.*
@@ -36,6 +38,8 @@ import java.util.*
     mappingsOutputFolder = "build/mappings",
     stubsMode = StubRunnerProperties.StubsMode.LOCAL
 )
+@Transactional
+@AutoConfigureTestEntityManager
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @Import(DatabaseTestConfiguration::class)
@@ -64,7 +68,7 @@ internal class DeliveryControllerTest {
             .andDo(
                 verify()
                     .wiremock(
-                        post(urlMatching("/api/v1/delivery/$ORDER_UID_SUCCESS/deliver"))
+                        post(urlEqualTo("/api/v1/delivery/$ORDER_UID_SUCCESS/deliver"))
                             .withRequestBody(matchingJsonPath("$.firstName", RegexPattern("\\S{10}")))
                             .withRequestBody(matchingJsonPath("$.lastName", RegexPattern("\\S{10}")))
                             .withRequestBody(matchingJsonPath("$.address", RegexPattern("\\S{10}")))
@@ -105,7 +109,7 @@ internal class DeliveryControllerTest {
             .andDo(
                 verify()
                     .wiremock(
-                        post(urlMatching("/api/v1/delivery/$ORDER_UID_NOT_FOUND/deliver"))
+                        post(urlEqualTo("/api/v1/delivery/$ORDER_UID_NOT_FOUND/deliver"))
                             .withRequestBody(matchingJsonPath("$.address", RegexPattern("\\S{10}")))
                             .withRequestBody(matchingJsonPath("$.firstName", RegexPattern("\\S{10}")))
                             .withRequestBody(matchingJsonPath("$.lastName", RegexPattern("\\S{10}")))
