@@ -27,8 +27,9 @@ import java.util.*
 )
 @AutoConfigureStubRunner(
     ids = ["ru.romanow.scc:warehouse:[1.0.0,2.0.0):stubs:8070"],
+    repositoryRoot = "https://romanow.jfrog.io/artifactory/scc-libs-release/",
     mappingsOutputFolder = "build/mappings",
-    stubsMode = StubRunnerProperties.StubsMode.LOCAL
+    stubsMode = StubRunnerProperties.StubsMode.REMOTE
 )
 internal class DeliveryManageServiceTest {
 
