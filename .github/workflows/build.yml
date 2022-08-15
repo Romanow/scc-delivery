@@ -22,3 +22,9 @@ jobs:
         env:
           GITHUB_USER: ${{ secrets.REPOSITORY_USER }}
           GITHUB_TOKEN: ${{ secrets.REPOSITORY_SECRET }}
+
+      - name: Test Report
+        uses: mikepenz/action-junit-report@v2
+        if: always()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
