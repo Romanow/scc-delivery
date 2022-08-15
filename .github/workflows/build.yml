@@ -20,5 +20,5 @@ jobs:
           dependencies-cache-enabled: true
           arguments: clean build publish
         env:
-          GITHUB_USER: Romanow
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USER: ${{ secrets.REPOSITORY_USER }}
+          GITHUB_TOKEN: ${{ secrets.REPOSITORY_SECRET }}

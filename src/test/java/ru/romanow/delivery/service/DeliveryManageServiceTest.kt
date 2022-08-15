@@ -23,13 +23,10 @@ import java.util.*
 
 
 @ActiveProfiles("test")
-@SpringBootTest(
-    classes = [DeliveryManageServiceTest.TestConfiguration::class],
-    properties = ["warehouse.service.url=http://localhost:8070"]
-)
+@SpringBootTest(classes = [DeliveryManageServiceTest.TestConfiguration::class])
 @AutoConfigureStubRunner(
-    ids = ["ru.romanow.scc:warehouse:[1.0.0,2.0.0):stubs:8070"],
-    repositoryRoot = "https://maven.pkg.github.com/Romanow/scc-warehouse/",
+    ids = ["ru.romanow.scc:warehouse:[1.0.0-SNAPSHOT,2.0.0-SNAPSHOT):stubs:8070"],
+    repositoryRoot = "https://maven.pkg.github.com/Romanow/scc-contracts/",
     mappingsOutputFolder = "build/mappings",
     stubsMode = StubRunnerProperties.StubsMode.REMOTE
 )
