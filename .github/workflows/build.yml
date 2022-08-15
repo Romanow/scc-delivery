@@ -20,5 +20,5 @@ jobs:
           dependencies-cache-enabled: true
           arguments: clean build publish
         env:
-          ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
-          ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+          GITHUB_USER: Romanow
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

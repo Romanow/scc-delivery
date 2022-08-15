@@ -13,6 +13,7 @@ import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRun
 import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.web.client.RestTemplate
 import ru.romanow.delivery.domain.Delivery
 import ru.romanow.delivery.exceptions.RestRequestException
@@ -21,13 +22,14 @@ import ru.romanow.delivery.repository.DeliveryRepository
 import java.util.*
 
 
+@ActiveProfiles("test")
 @SpringBootTest(
     classes = [DeliveryManageServiceTest.TestConfiguration::class],
     properties = ["warehouse.service.url=http://localhost:8070"]
 )
 @AutoConfigureStubRunner(
     ids = ["ru.romanow.scc:warehouse:[1.0.0,2.0.0):stubs:8070"],
-    repositoryRoot = "https://romanow.jfrog.io/artifactory/scc-libs-release/",
+    repositoryRoot = "https://maven.pkg.github.com/Romanow/scc-warehouse/",
     mappingsOutputFolder = "build/mappings",
     stubsMode = StubRunnerProperties.StubsMode.REMOTE
 )
